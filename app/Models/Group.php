@@ -25,6 +25,11 @@ class Group extends Model
         });
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
     public function game()
     {
         return $this->belongsTo(Game::class);

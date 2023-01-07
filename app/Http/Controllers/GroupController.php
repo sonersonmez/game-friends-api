@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddUserToGroupRequest;
 use App\Http\Requests\DeleteGroupRequest;
 use App\Http\Requests\ShowGroupRequest;
 use App\Http\Requests\StoreGroupRequest;
@@ -9,7 +10,9 @@ use App\Http\Requests\UpdateGroupRequest;
 use App\Http\Resources\GroupResource;
 use App\Models\Game;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class GroupController extends Controller
@@ -56,7 +59,7 @@ class GroupController extends Controller
     {
         $group = Group::uuid($request->group_id);
 
-        $group->load('game:id,uuid,name');
+        $group->load('game:id,uuid,name', 'users:id,uuid,name');
 
         return GroupResource::make($group);
     }
@@ -92,5 +95,15 @@ class GroupController extends Controller
         $group->delete();
 
         return Response::noContent();
+    }
+
+    public function addUserToGroup(AddUserToGroupRequest $request)
+    {
+        DB::table('group_user')->insert([
+            'user_id'  => User::getId($request->user_id),
+            'group_id' => Group::getId($request->group_id)
+        ]);
+
+        return Response::make();
     }
 }
