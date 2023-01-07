@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class Game extends Model
+class Group extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
-        'category_id'
+        'game_id'
     ];
 
     protected static function boot()
@@ -25,6 +25,16 @@ class Game extends Model
         });
     }
 
+    public function game()
+    {
+        return $this->belongsTo(Game::class);
+    }
+
+    public function groups()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
     public function scopeUuid($query, $uuid)
     {
         return $query->where('uuid', $uuid)->first();
@@ -33,15 +43,5 @@ class Game extends Model
     public function scopeGetId($query, $uuid)
     {
         return $query->where('uuid', $uuid)->first()->id;
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
-
-    public function groups()
-    {
-        return $this->hasMany(Group::class);
     }
 }

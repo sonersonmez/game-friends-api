@@ -36,7 +36,7 @@ class GameController extends Controller
     public function store(StoreGameRequest $request)
     {
         $game = Game::create([
-            'name' => $request->name,
+            'name'        => $request->name,
             'category_id' => Category::getId($request->input('category.id'))
         ]);
 

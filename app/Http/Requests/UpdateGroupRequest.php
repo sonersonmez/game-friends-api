@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreGameRequest extends FormRequest
+class UpdateGroupRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,16 +24,31 @@ class StoreGameRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'        => ['required', 'string', 'max:255', 'unique:games'],
-            'category.id' => ['required', 'uuid', 'exists:categories,uuid,deleted_at,NULL']
+            'group_id'    => ['required', 'uuid', 'exists:groups,uuid,deleted_at,NULL'],
+            'name'        => ['required_with:name', 'string', 'max:255']
         ];
     }
 
     public function attributes()
     {
         return [
+            'group_id'    => __('string.group_id'),
             'name'        => __('string.name'),
-            'category.id' => __('string.category_id')
+        ];
+    }
+
+    public function prepareForValidation()
+    {
+        return [
+            $this->merge(['group_id' => $this->group_id])
+        ];
+    }
+
+    public function payload()
+    {
+        return [
+            'group_id'    => $this->group_id,
+            'name'        => $this->name
         ];
     }
 }
