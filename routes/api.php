@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\GroupController;
@@ -20,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/register', [AuthenticationController::class, 'register']);
 
 Route::group(['prefix' => 'categories'], function(){
     Route::get('/', [CategoryController::class, 'index']);
@@ -43,4 +46,5 @@ Route::group(['prefix' => 'groups'], function(){
     Route::get('/{group_id}', [GroupController::class, 'show']);
     Route::put('/{group_id}', [GroupController::class, 'update']);
     Route::delete('/{group_id}', [GroupController::class, 'destroy']);
+    Route::post('/{group_id}/add/{user_id}', [GroupController::class, 'addUserToGroup']);
 });
