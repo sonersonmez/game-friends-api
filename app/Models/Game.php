@@ -3,16 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class Category extends Model
+class Game extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name'
+        'name',
+        'category_id'
     ];
 
     protected static function boot()
@@ -28,14 +29,8 @@ class Category extends Model
     {
         return $query->where('uuid', $uuid)->first();
     }
-    
-    public function scopeGetId($query, $uuid)
-    {
-        return $query->where('uuid', $uuid)->first()->id;
-    }
 
-    public function game()
-    {
-        return $this->hasMany(Game::class);
+    public function category(){
+        return $this->belongsTo(Category::class);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\GameController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +26,12 @@ Route::group(['prefix' => 'categories'], function(){
     Route::get('/{category_id}', [CategoryController::class, 'show']);
     Route::put('/{category_id}', [CategoryController::class, 'update']);
     Route::delete('/{category_id}', [CategoryController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'games'], function(){
+    Route::get('/', [GameController::class, 'index']);
+    Route::post('/', [GameController::class, 'store']);
+    Route::get('/{game_id}', [GameController::class, 'show']);
+    Route::put('/{game_id}', [GameController::class, 'update']);
+    Route::delete('/{game_id}', [GameController::class, 'destroy']);
 });
