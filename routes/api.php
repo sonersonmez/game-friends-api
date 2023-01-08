@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/register', [AuthenticationController::class, 'register']);
+
+Route::group(['prefix' => 'users'], function(){
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('/{user_id}', [UserController::class, 'show']);
+    Route::put('/{user_id}', [UserController::class, 'update']);
+    Route::delete('/{user_id}', [UserController::class, 'destroy']);
+});
 
 Route::group(['prefix' => 'categories'], function(){
     Route::get('/', [CategoryController::class, 'index']);

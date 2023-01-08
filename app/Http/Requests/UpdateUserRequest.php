@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 
-class RegisterUserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,10 @@ class RegisterUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'                  => ['required', 'string', 'max:255'],
-            'email'                 => ['required', 'email:rfc,dns', 'unique:users'],
-            'password'              => ['required', 'string', 'min:8', 'confirmed'],
+            'user_id'               => ['required', 'uuid', 'exists:users,uuid,deleted_at,NULL'],
+            'name'                  => ['required_with:name', 'string', 'max:255'],
+            'email'                 => ['required_with:email', 'email:rfc,dns', 'unique:users'],
+            'password'              => ['required_with:password', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['required_with:password', 'min:8', 'same:password']
         ];
     }
@@ -40,6 +41,11 @@ class RegisterUserRequest extends FormRequest
             'password'              => __('string.email'),
             'password_confirmation' => __('string.password_confirmation')
         ];
+    }
+
+    public function prepareForValidation()
+    {
+        return $this->merge(['user_id' => $this->user_id]);
     }
 
     public function payload()
