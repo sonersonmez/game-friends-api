@@ -17,7 +17,8 @@ class GroupResource extends JsonResource
         return [
             'id'   => $this->uuid,
             'name' => $this->name,
-            'game' => GameResource::make($this->whenLoaded('game'))
+            'game' => GameResource::make($this->whenLoaded('game')),
+            'users' => UserResource::collection($this->whenLoaded('users'))
         ];
     }
 }
